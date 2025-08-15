@@ -237,6 +237,13 @@ def generate_launch_description():
 
 ## 👨‍💻 Build from source
 
+### Dependencies
+Install dependencies `ros-dev-tools`:
+```shell
+sudo apt install ros-dev-tools
+```
+
+### Build
 Download the source code and build with colcon
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -244,8 +251,7 @@ git clone https://github.com/qualcomm-qrb-ros/qrb_ros_system_monitor.git
 colcon build
 ```
 
-Run and debug
-
+### Run and debug
 ```bash
 source install/setup.bash
 ros2 run qrb_ros_system_monitor qrb_ros_system_monitor
