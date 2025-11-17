@@ -1,0 +1,7 @@
+ros-jazzy-qrb-ros-system-monitor-interfaces (1.1.0noble) noble; urgency=high
+
+ * Debian package for qrb_ros_system_monitor_interfaces (1.1.0 noble)
+
+ -- Peng Wang <penwang@qti.qualcomm.com>  Wed, 04 Jun 2025 03:41:52 -0000
+
+

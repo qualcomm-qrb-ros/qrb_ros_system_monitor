@@ -1,0 +1,12 @@
+Source: ros-jazzy-qrb-ros-system-monitor-interfaces
+Section: misc
+Priority: optional
+Maintainer: Peng Wang <penwang@qti.qualcomm.com>
+Build-Depends: debhelper (>= 9.0.0), ros-jazzy-ament-cmake, ros-jazzy-ament-lint-auto <!nocheck>, ros-jazzy-ament-lint-common <!nocheck>, ros-jazzy-rosidl-default-generators, ros-jazzy-std-msgs
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-jazzy-qrb-ros-system-monitor-interfaces
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-jazzy-rosidl-default-runtime, ros-jazzy-std-msgs
+Description: System monitor interfaces
