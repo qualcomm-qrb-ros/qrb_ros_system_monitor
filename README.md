@@ -145,7 +145,7 @@ QRB ROS system monitors includes various ROS 2 nodes to publish informations wit
 Add Qualcomm IOT PPA for Ubuntu:
 
 ```bash
-sudo add-apt-repository ppa:ubuntu-qcom-iot/qcom-noble-ppa
+sudo add-apt-repository ppa:ubuntu-qcom-iot/qcom-ppa
 sudo add-apt-repository ppa:ubuntu-qcom-iot/qirp
 sudo apt update
 ```
