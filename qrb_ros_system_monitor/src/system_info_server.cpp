@@ -3,14 +3,12 @@
 
 #include "qrb_ros_system_monitor/system_info_server.hpp"
 
-#include <chrono>
-#include <fstream>
 #include <iostream>
 #include <memory>
 #include <sstream>
 #include <string>
-#include <utility>
 
+#include "qrb_ros_system_monitor/filesystem_info.hpp"
 #include "qrb_ros_system_monitor/utils.hpp"
 
 namespace qrb_ros_system_monitor
@@ -51,23 +49,18 @@ void SystemInfoServer::get_system_info(
   iss_swap >> unused >> resp.swap_total;
   resp.swap_total /= 1024;
 
-  std::string result = exec_command("df -BM -l -x tmpfs -x overlay -x devtmpfs");
-  if (result.empty()) {
-    RCLCPP_ERROR(this->get_logger(), "exec df error");
+  auto list = get_filesystem_list();
+  if (list.empty()) {
+    RCLCPP_ERROR(this->get_logger(), "get filesystem list error");
     return;
   }
 
-  std::istringstream iss_disk(result);
-  std::string s_filesystem, s_blocks, s_used, s_avaliable, s_use_rate, s_mount_on;
-  if (!(iss_disk >> s_filesystem >> s_blocks >> s_used >> s_avaliable >> s_use_rate >> s_mount_on >>
-          unused)) {
-    RCLCPP_ERROR(this->get_logger(), "read exec stream error");
-    return;
-  }
-  uint64_t disk_size_m;
-  while (iss_disk >> unused >> disk_size_m >> unused >> unused >> unused >> unused >> unused >>
-         unused >> unused >> unused) {
-    resp.disk_total += disk_size_m;
+  // only count local physical disks
+  for (const auto & item : list) {
+    if (item.type == "tmpfs" || item.type == "overlay" || is_network_filesystem(item.type)) {
+      continue;
+    }
+    resp.disk_total += item.total;
   }
 }
 
