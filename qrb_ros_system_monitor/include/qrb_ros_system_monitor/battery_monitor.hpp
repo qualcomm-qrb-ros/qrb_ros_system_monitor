@@ -22,7 +22,7 @@ private:
   void get_battery_info(std_msgs::msg::Float32 & info);
   rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_;
   rclcpp::TimerBase::SharedPtr timer_;
-  std::string power_capacity_sysfs_path_{ "" };
+  std::string power_capacity_sysfs_path_{""};
 };
 
 }  // namespace qrb_ros_system_monitor
