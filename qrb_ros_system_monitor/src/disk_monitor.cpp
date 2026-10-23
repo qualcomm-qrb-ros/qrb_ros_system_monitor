@@ -4,14 +4,11 @@
 #include "qrb_ros_system_monitor/disk_monitor.hpp"
 
 #include <chrono>
-#include <fstream>
-#include <iostream>
 #include <memory>
-#include <sstream>
 #include <string>
 #include <utility>
 
-#include "qrb_ros_system_monitor/utils.hpp"
+#include "qrb_ros_system_monitor/filesystem_info.hpp"
 
 using namespace std::chrono_literals;
 
@@ -35,23 +32,21 @@ void DiskMonitor::on_timer()
 
 void DiskMonitor::get_disk_info(qrb_ros_system_monitor_interfaces::msg::DiskInfo & info)
 {
-  std::string result = exec_command("df -BM -T");
-  if (result.empty()) {
-    RCLCPP_ERROR(this->get_logger(), "exec df -BM error");
+  auto list = get_filesystem_list();
+  if (list.empty()) {
+    RCLCPP_ERROR(this->get_logger(), "get filesystem list error");
     return;
   }
 
-  std::istringstream iss(result);
-  std::string s_filesystem, s_type, s_blocks, s_used, s_avaliable, s_use_rate, s_mount_on;
-  if (!(iss >> s_filesystem >> s_type >> s_blocks >> s_used >> s_avaliable >> s_use_rate >>
-          s_mount_on >> s_mount_on)) {
-    RCLCPP_ERROR(this->get_logger(), "read exec stream error");
-    return;
-  }
   qrb_ros_system_monitor_interfaces::msg::FileSystem fs;
-  std::string unused;
-  while (iss >> fs.fs >> fs.type >> fs.total >> unused >> fs.used >> unused >> fs.avail >> unused >>
-         fs.use_rate >> unused >> fs.mount) {
+  for (const auto & item : list) {
+    fs.fs = item.fs;
+    fs.type = item.type;
+    fs.total = item.total;
+    fs.used = item.used;
+    fs.avail = item.avail;
+    fs.use_rate = item.use_rate;
+    fs.mount = item.mount;
     info.fslist.emplace_back(fs);
   }
 }
